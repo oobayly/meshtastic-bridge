@@ -2,6 +2,7 @@ from haversine import haversine
 from meshtastic import mesh_pb2
 from random import randrange
 import base64
+import jmespath
 import json
 import logging
 import os
@@ -241,14 +242,20 @@ class WebhookPlugin(Plugin):
         )
         text = packet["decoded"]["text"] if "text" in packet["decoded"] else None
 
-        macros = {
-            "{LAT}": position["latitude"] if position else "",
-            "{LNG}": position["longitude"] if position else "",
-            "{TIME}": position["time"] if position else "",
-            "{MSG}": self.config["message"] if "message" in self.config else text,
-            "{FID}": packet["fromId"],
-            "{TID}": packet["toId"],
-        }
+        if "macros" in self.config:
+            macros = {}
+            for name, path in self.config["macros"].items():
+                value = jmespath.search(path, packet)
+                macros["{" + name + "}"] = "" if value is None else value
+        else:
+            macros = {
+                "{LAT}": position["latitude"] if position else "",
+                "{LNG}": position["longitude"] if position else "",
+                "{TIME}": position["time"] if position else "",
+                "{MSG}": self.config["message"] if "message" in self.config else text,
+                "{FID}": packet["fromId"],
+                "{TID}": packet["toId"],
+            }
 
         body = self.config["body"]
         url = self.config["url"]
