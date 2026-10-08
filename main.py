@@ -189,6 +189,8 @@ if "mqtt_servers" in bridge_config:
         if "insecure" in config and config["insecure"]:
             mqttc.tls_set(cert_reqs=ssl.CERT_NONE)
             mqttc.tls_insecure_set(True)
+        elif "tls" in config and config["tls"]:
+            mqttc.tls_set()
 
         try:
             logger.debug(f"Connecting to MQTT {config['server']}")

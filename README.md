@@ -93,6 +93,7 @@ NOTE: If `tcp` or `serial` are not given the bridge will attempt to detect a rad
 - **port** The port the MQTT server listens on
 - **topic** The topic name associated with the network traffic. For example, `mesh/network`
 - **insecure** Use a secure connection but do not validate the server certificate
+- **tls** Use a secure connection and validate the server certificate
 - **pipelines** A set of plugins (filters/actions) that run when a new message emerges for _topic_. Each pipeline is given a name; such as `mqtt-to-radio` (as in the example above)
 
 `pipelines` is a list of ordered plugins (filters/actions) that run when a packet is detected by any connected radio. Each set is given a name; such as `radio-to-mqtt` (as in the example above). Pipelines can run in any order, however plugins run in the order they are defined.
