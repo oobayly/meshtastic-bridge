@@ -1,4 +1,5 @@
 haversine
+jmespath
 meshtastic
 requests
 pyyaml

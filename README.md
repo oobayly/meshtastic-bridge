@@ -175,6 +175,7 @@ location_filter:
 - **url** The target URL
 - **headers** HTTP headers to include in the request. Secrets can be passed using ENV variables
 - **message** Override the packet message
+- **macros** Override the default macros by replacing them with a set of JMESPath expressions
 
 Placeholders can be used with the **body** value:
 
@@ -191,6 +192,11 @@ webhook:
   active: true
   body: '{"lat": "{LAT}", "lng": "{LNG}", "text_message": "{MSG}"}'
   url: 'https://localhost:8000/message'
+  macros:
+    LAT: decoded.position.latitude
+    LNG: decoded.position.longitude
+    FID: fromId
+    PAYLOAD: decoded.payload
   headers:
      Authorization: Token {AUTH_TOKEN}
      Content-type: application/json
