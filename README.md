@@ -177,10 +177,11 @@ location_filter:
 - **headers** HTTP headers to include in the request. Secrets can be passed using ENV variables
 - **message** Override the packet message
 
-Placeholders can be used with the **body** value:
+Placeholders can be used with the **body** and the **url** values:
 
 - `{LAT}` - Latitude associated with the POSITION packet. Empty if no value available.
-- `{LNG}` - Latitude associated with the POSITION packet. Empty if no value available.
+- `{LNG}` - Longitude associated with the POSITION packet. Empty if no value available.
+- `{TIME}` - The `time` associated with the POSITION packet. Empty if no value available.
 - `{MSG}` - Packet text or `message` from the configuration (above)
 - `{FID}` - The `fromId` associated with the packet.
 - `{TID}` - The `toId` associated with the packet.
@@ -191,7 +192,7 @@ For example:
 webhook:
   active: true
   body: '{"lat": "{LAT}", "lng": "{LNG}", "text_message": "{MSG}"}'
-  url: 'https://localhost:8000/message'
+  url: 'https://localhost:8000/message/{FID}'
   headers:
      Authorization: Token {AUTH_TOKEN}
      Content-type: application/json

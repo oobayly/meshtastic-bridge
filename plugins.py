@@ -244,19 +244,22 @@ class WebhookPlugin(Plugin):
         macros = {
             "{LAT}": position["latitude"] if position else "",
             "{LNG}": position["longitude"] if position else "",
+            "{TIME}": position["time"] if position else "",
             "{MSG}": self.config["message"] if "message" in self.config else text,
             "{FID}": packet["fromId"],
             "{TID}": packet["toId"],
         }
 
         body = self.config["body"]
+        url = self.config["url"]
 
         for macro, value in macros.items():
             body = body.replace(macro, str(value))
+            url = url.replace(macro, str(value))
 
         payload = json.loads(body)
 
-        self.logger.debug(f"Sending http POST request to {self.config['url']}")
+        self.logger.debug(f"Sending http POST request to {url}")
 
         # pass secrets from environment variables to request headers
         headers = self.config["headers"] if "headers" in self.config else {}
@@ -268,7 +271,7 @@ class WebhookPlugin(Plugin):
 
             headers[k] = v
 
-        response = requests.post(self.config["url"], headers=headers, json=payload)
+        response = requests.post(url, headers=headers, json=payload)
 
         if not response.ok:
             self.logger.warning(f"Error returned: {response.status_code}")
